@@ -35,8 +35,6 @@ def pos_line(line, point_1, point_2):
     line.set_data(x_data, y_data)
     line.set_3d_properties(z_data)
 
-
-
 def get_htm_mp(knucle, target, target_o=0):
     x1, y1, z1 = knucle.get_data_3d()
     p1 = np.array([x1[0], y1[0], z1[0]])
@@ -136,3 +134,17 @@ def from_final_pos_to_joints(T, final_pos, l1, l2, l3, phi, threshold=10):
     joint2_o = T @ np.array(joint2_pos)
     return joint1_o, joint2_o
 
+def normalize_angle(angle_f1, angle_f2, angle_f3, angle_f4, angle_f5):
+    closure_ang1 = ((angle_f1 - 7.53)*0.2)/(103.93 - 7.53)
+    closure_ang2 = ((angle_f2 - 19.8)*0.2)/(119.67 - 19.8)
+    closure_ang3 = ((angle_f3 - 22.43)*0.2)/(126.41 - 22.43)
+    closure_ang4 = ((angle_f4 - 46.4)*0.2)/(122.4 - 46.4)
+    closure_ang5 = ((angle_f5 - 51.27)*0.2)/(73.18 - 51.27)
+    normalized_angles = [closure_ang1, closure_ang2, closure_ang3, closure_ang4, closure_ang5]
+    for i in range(len(normalized_angles)):
+        if normalized_angles[i] < 0:
+            normalized_angles[i] = 0
+        elif normalized_angles[i] > 1:
+            normalized_angles[i] = 0.2
+    closure = closure_ang1 + closure_ang2 + closure_ang3 + closure_ang4 + closure_ang5
+    return closure
