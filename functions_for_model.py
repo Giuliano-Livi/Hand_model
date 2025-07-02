@@ -35,6 +35,8 @@ def pos_line(line, point_1, point_2):
     line.set_data(x_data, y_data)
     line.set_3d_properties(z_data)
 
+
+# Function to get the homogeneous transformation matrix of a knuckle
 def get_htm_mp(knucle, target, target_o=0):
     x1, y1, z1 = knucle.get_data_3d()
     p1 = np.array([x1[0], y1[0], z1[0]])
@@ -59,7 +61,7 @@ def get_htm_mp(knucle, target, target_o=0):
 
 
 
-# Create an axis
+# Function to show the frame of a joint
 def print_axis(ax, point_1, point_2):
     x1, y1, z1 = point_1.get_data_3d()
     p1 = np.array([x1[0], y1[0], z1[0]])
@@ -85,7 +87,7 @@ def pos_point(marker, x, y, z):
     marker.set_3d_properties([z])
 
 
-
+# Function to calculate the angle between two vectors
 def angle_between_vectors(v1, v2):
     unit_v1 = v1 / np.linalg.norm(v1)
     unit_v2 = v2 / np.linalg.norm(v2)
@@ -95,7 +97,7 @@ def angle_between_vectors(v1, v2):
     return angle_deg
 
 
-
+# Function to calculate the inverse kinematic of the hand
 def inverse_kinematic(final_point, l1, l2, l3, phi=140, threshold=1):
     x_p = final_point[0] - l3 * math.cos(math.radians(phi))
     y_p = final_point[1] - l3 * math.sin(math.radians(phi))
@@ -111,7 +113,7 @@ def inverse_kinematic(final_point, l1, l2, l3, phi=140, threshold=1):
     return theta_1, theta_2, theta_3
 
 
-
+# Function to calculate the direct kinematic of the hand
 def direct_kinematic(theta1, theta2, theta3, l1, l2, l3):
     x0, y0 = 0, 0
     x1 = x0 + l1 * math.cos(math.radians(theta1))
@@ -123,7 +125,7 @@ def direct_kinematic(theta1, theta2, theta3, l1, l2, l3):
     return x1, y1, x2, y2, x3, y3
 
 
-
+# Function to convert final position to joint positions
 def from_final_pos_to_joints(T, final_pos, l1, l2, l3, phi, threshold=10):
     f_in_knucle_coo = np.linalg.inv(T) @ np.array([final_pos[0], final_pos[1], final_pos[2], 1])
     theta_1, theta_2, theta_3 = inverse_kinematic(f_in_knucle_coo[:2], l1, l2, l3, phi, threshold)
@@ -134,6 +136,7 @@ def from_final_pos_to_joints(T, final_pos, l1, l2, l3, phi, threshold=10):
     joint2_o = T @ np.array(joint2_pos)
     return joint1_o, joint2_o
 
+# Function to give the closure value of the hand
 def normalize_angle(angle_f1, angle_f2, angle_f3, angle_f4, angle_f5):
     closure_ang1 = ((angle_f1 - 7.53)*0.2)/(103.93 - 7.53)
     closure_ang2 = ((angle_f2 - 19.8)*0.2)/(119.67 - 19.8)
