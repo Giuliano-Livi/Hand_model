@@ -11,7 +11,7 @@ import time
 import rosbag
 
 # Select the dataset you want to work on
-chosen_dataset = "power_grasp2.bag"
+chosen_dataset = "little3.bag"
 
 
 #-----------------------------------------------------------------------
@@ -91,7 +91,7 @@ for topic, msg, t in bag.read_messages():
                 if last_marker_positions[i] is not None:
                     marker_positions[i].append(last_marker_positions[i])
                 else:
-                    marker_positions[i].append([np.nan, np.nan, np.nan])  # If no last position is available, append NaN
+                    marker_positions[i].append([0, 0, 0])  # If no last position is available, append 0,0,0
             else:
                 marker_positions[i].append(current_marker_positions[i])
 bag.close()
@@ -101,7 +101,6 @@ np.save("npy_files/hand_positions.npy", np.array(hand_positions))
 np.save("npy_files/hand_orientations.npy", np.array(hand_orientations))
 for i in range(5):
     np.save(f"npy_files/marker_{i}_positions.npy", np.array(marker_positions[i]))
-
 
 # Calculate the frequency and duration of vicon data
 timestamp = np.array(timestamp)
@@ -126,6 +125,7 @@ pos_f3 = np.load("npy_files/marker_2_positions.npy").tolist()
 pos_f4 = np.load("npy_files/marker_3_positions.npy").tolist()
 pos_f5 = np.load("npy_files/marker_4_positions.npy").tolist()
 
+min_length = min(len(pos_hand), len(rot_hand), len(pos_f1), len(pos_f2), len(pos_f3), len(pos_f4), len(pos_f5))
 
 # Find the number of times you have to use the same vicon data to match the EMG data length
 n_of_times = round(sample_number/len(pos_hand))
@@ -183,12 +183,12 @@ m_nulla = np.array([[1,0,0],[0,1,0],[0,0,1]])
 
 # Define the structure of the hand
 pos_point(origin, 0, 0, 0)
-pos_point(point_h1, -0.025, 0.05, -0.01)
-pos_point(point_h2, -0.025, -0.035, -0.01)
-pos_point(point_h3, 0.06, -0.035, -0.01)
-pos_point(point_h4, 0.062, -0.01, -0.01)
-pos_point(point_h5, 0.065, 0.02, -0.01)
-pos_point(point_h6, 0.062, 0.05, -0.01)
+pos_point(point_h1, -0.02, 0.025, -0.045)
+pos_point(point_h2, 0.01, -0.06, -0.015)
+pos_point(point_h3, 0.11, -0.025, -0.015)
+pos_point(point_h4, 0.11, 0, -0.025)
+pos_point(point_h5, 0.1, 0.03, -0.035)
+pos_point(point_h6, 0.07, 0.07, -0.045)
 pos_line(line_h1, point_h1, point_h2)
 pos_line(line_h2, point_h2, point_h3)
 pos_line(line_h3, point_h3, point_h4)
@@ -197,7 +197,7 @@ pos_line(line_h5, point_h5, point_h6)
 pos_line(line_h6, point_h6, point_h1)
 
 # Initialization loop, to stop some frames the animation
-for i in range(20):
+for i in range(1):
 
     # Update finger marker positions
     pos_point(marker_f1, f1_rel_prev[0], f1_rel_prev[1], f1_rel_prev[2])
@@ -212,7 +212,7 @@ for i in range(20):
 
 
 # Animation loop
-for i in range(len(pos_hand)):
+for i in range(min_length):
 
     # Rotation matrix calculation to pass from the world frame to the hand frame
     rotation_matrix = from_q_to_rotation(rot_hand[i])

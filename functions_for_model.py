@@ -138,11 +138,11 @@ def from_final_pos_to_joints(T, final_pos, l1, l2, l3, phi, threshold=10):
 
 # Function to give the closure value of the hand
 def normalize_angle(angle_f1, angle_f2, angle_f3, angle_f4, angle_f5):
-    closure_ang1 = ((angle_f1 - 7.53)*0.2)/(103.93 - 7.53)
-    closure_ang2 = ((angle_f2 - 19.8)*0.2)/(119.67 - 19.8)
-    closure_ang3 = ((angle_f3 - 22.43)*0.2)/(126.41 - 22.43)
-    closure_ang4 = ((angle_f4 - 46.4)*0.2)/(122.4 - 46.4)
-    closure_ang5 = ((angle_f5 - 51.27)*0.2)/(73.18 - 51.27)
+    closure_ang1 = ((angle_f1 - 1.7121306263980842)*0.2)/(104.01385158747752 - 1.7121306263980842)
+    closure_ang2 = ((angle_f2 - 0.07957380063842415)*0.2)/(113.15397453628636 - 0.07957380063842415)
+    closure_ang3 = ((angle_f3 - 0.04798790243154717)*0.2)/(114.90405817969317 - 0.04798790243154717)
+    closure_ang4 = ((angle_f4 - 10.136765578461862)*0.2)/(112.90098354889193 - 10.136765578461862)
+    closure_ang5 = ((angle_f5 - 19.37360064478024)*0.2)/(71.02221487695077 - 19.37360064478024)
     normalized_angles = [closure_ang1, closure_ang2, closure_ang3, closure_ang4, closure_ang5]
     for i in range(len(normalized_angles)):
         if normalized_angles[i] < 0:
